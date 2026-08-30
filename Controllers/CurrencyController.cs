@@ -81,7 +81,26 @@ namespace EntityFrameworkCore.Controllers
         [HttpPost("all")]
         public async Task<IActionResult> GetCurrencyByIdsAync([FromBody] List<int> ids)
         {
-            var result = await _appDbContext.Currencies.Where(u => ids.Contains(u.Id)).ToListAsync();
+            //var result = await _appDbContext.Currencies.Where(u => ids.Contains(u.Id)).ToListAsync();
+
+            //Select only the required fields from the table, instead of fetching all the fields from the table
+            //var result = await _appDbContext.Currencies.Where(u => ids.Contains(u.Id))
+            //    .Select(u => new
+            //    {
+            //        u.Title,
+            //        u.Description
+            //    }).
+            //    ToListAsync();
+
+            var result = await (from currency in _appDbContext.Currencies
+                         where ids.Contains(currency.Id)
+                         select new
+                         {
+                             CurrencyTitle = currency.Title,
+                             CurrencyDescription = currency.Description
+                         }).ToListAsync();
+
+
             return Ok(result);
         }
 
