@@ -45,6 +45,27 @@ namespace EntityFrameworkCore.Controllers
             return Ok(books);
         }
 
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Updatebook(int id, [FromBody] Book book)
+        {
+            var objBook = _appDbContext.Books.FirstOrDefault(x => x.Id == id);
+            if (objBook == null)
+            {
+                return NotFound();
+            }
+
+            objBook.Title = book.Title;
+            objBook.Description = book.Description;
+            objBook.isActive = book.isActive;
+            objBook.CreatedOn = DateTime.Now;
+
+            await _appDbContext.SaveChangesAsync();
+            return Ok(book);
+
+
+
+        }
+
 
     }
 }
