@@ -11,11 +11,11 @@ namespace EntityFrameworkCore.Data
 
         override protected void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Book>().HasData(
-                new Book { Id = 1, Title = "Harry Potter 1", Description = "Description for Harry Potter 1", isActive = "true", CreatedOn = DateTime.Now.ToString() },
-                new Book { Id = 2, Title = "Harry Potter 2", Description = "Description for Harry Potter 2", isActive = "true", CreatedOn = DateTime.Now.ToString() },
-                new Book { Id = 3, Title = "Harry Potter 3", Description = "Description for Harry Potter 3", isActive = "true", CreatedOn = DateTime.Now.ToString() });
-            
+            //modelBuilder.Entity<Book>().HasData(
+            //    new Book { Id = 1, Title = "Harry Potter 1", Description = "Description for Harry Potter 1", isActive = "true", CreatedOn = DateTime.Now},
+            //    new Book { Id = 2, Title = "Harry Potter 2", Description = "Description for Harry Potter 2", isActive = "true", CreatedOn = DateTime.Now },
+            //    new Book { Id = 3, Title = "Harry Potter 3", Description = "Description for Harry Potter 3", isActive = "true", CreatedOn = DateTime.Now });
+
             modelBuilder.Entity<Currency>().HasData(
                 new Currency { Id = 1, Title = "USD", Description="US Dollar", bookPrices = null },
                 new Currency { Id = 2, Title = "EUR", Description = "Euro", bookPrices = null },
@@ -30,5 +30,6 @@ namespace EntityFrameworkCore.Data
         public DbSet<Book> Books { get; set; }    
         public DbSet<Currency> Currencies { get; set; }    
         public DbSet<Language> Languages { get; set; }    
+        public DbSet<Author> Authors { get; set; }    
     }
 }

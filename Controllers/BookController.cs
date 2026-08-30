@@ -24,7 +24,7 @@ namespace EntityFrameworkCore.Controllers
             return Ok(result);
         }
 
-        [HttpPost]
+        [HttpPost("Addbook")]
         public async Task<IActionResult> AddNewBook([FromBody] Book book)
         {
             book.CreatedOn = DateTime.Now;

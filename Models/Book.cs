@@ -10,5 +10,8 @@ namespace EntityFrameworkCore.Models
         public string Description { get; set; }
         public string isActive { get; set; }
         public DateTime CreatedOn { get; set; }
+
+        public int? AuthorId { get; set; }
+        public Author? Author { get; set; }
     }
 }
