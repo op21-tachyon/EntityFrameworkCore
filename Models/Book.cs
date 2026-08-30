@@ -9,6 +9,6 @@ namespace EntityFrameworkCore.Models
         public string Title { get; set; }
         public string Description { get; set; }
         public string isActive { get; set; }
-        public string CreatedOn { get; set; }
+        public DateTime CreatedOn { get; set; }
     }
 }
