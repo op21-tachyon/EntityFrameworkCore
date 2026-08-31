@@ -2,6 +2,7 @@
 using EntityFrameworkCore.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using System.Runtime.InteropServices;
 
@@ -21,12 +22,12 @@ namespace EntityFrameworkCore.Controllers
         [HttpGet("allasync")]
         public async Task<IActionResult> GetBookAync()
         {
-            //var result = await _appDbContext.Books.Select(x=> new Book
-            //{
-            //    Id = x.Id,
-            //    Title = x.Title,
-            //    Author = x.Author 
-            //}).AsNoTracking().ToListAsync();
+            var result = await _appDbContext.Books.Select(x => new Book
+            {
+                Id = x.Id,
+                Title = x.Title,
+                Author = x.Author
+            }).AsNoTracking().ToListAsync();
 
             //Eager loading: Fetching the related Author entity along with the Book entity in a single query
             //var result = await _appDbContext.Books
@@ -40,8 +41,21 @@ namespace EntityFrameworkCore.Controllers
 
 
             //Lazy loading: Fetching the related Author entity automatically when accessing the navigation property
-            var result = await _appDbContext.Books.FirstAsync();
-            
+            //var result = await _appDbContext.Books.FirstAsync();
+
+            //var result = _appDbContext.Books.FromSql($"SELECT * FROM Books").ToList();
+
+            //calling stored procedure to get all books
+            //var result = _appDbContext.Books.FromSql($"EXEC SP_GetBooks").ToList();
+
+            //caliing stored procedure to get book by id
+            //var param = new SqlParameter("@Id", 1);
+            //var result = _appDbContext.Books.FromSql($"EXEC SP_GetBookById {param}").ToList();
+
+
+            //Updating table recor ds using ExecuteSqlAsync method
+            //var result = await _appDbContext.Database.ExecuteSqlAsync($"Update Books set AuthorId = 2 where Id = 5");
+
             return Ok(result);
         }
 
