@@ -2,6 +2,7 @@
 using EntityFrameworkCore.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace EntityFrameworkCore.Controllers
 {
@@ -61,9 +62,65 @@ namespace EntityFrameworkCore.Controllers
 
             await _appDbContext.SaveChangesAsync();
             return Ok(book);
+        }
+
+        [HttpPut("UpdatebookWithSingleQuery")]
+        public async Task<IActionResult> UpdatebookWithSingleQuery([FromBody] Book book)
+        {
+            _appDbContext.Books.Update(book);
+            await _appDbContext.SaveChangesAsync();
+            return Ok(book);
+        }
+
+        [HttpPut("UpdatebookInBulk")]
+        public async Task<IActionResult> UpdatebookInBulk()
+        {
+            var result = await _appDbContext.Books.Where(b => b.Title == "Harry Potter 3").ExecuteUpdateAsync(b => b
+            .SetProperty(p => p.Description,p => p.Title +" " +"This is a book Description for Harry Potter 3"));
+
+            await _appDbContext.SaveChangesAsync();
+            return Ok(result);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteBookById([FromRoute] int id)
+        {
+            //Soft delete by setting isActive to "0" for all books
+            //var result = await _appDbContext.Books.Where(x=>x.Id == id).ExecuteUpdateAsync(x=>x.SetProperty(b => b.isActive, b => "0"));
+
+            //Hard delete by removing the book from the database
+            //var book = await _appDbContext.Books.FindAsync(id);
+            //if (book == null)
+            //{
+            //    return NotFound();
+            //}
+            //_appDbContext.Books.Remove(book);
+            //await _appDbContext.SaveChangesAsync();
 
 
+            //Single databse call to delete the book by creating a new instance of the Book class with the specified id and setting its state to Deleted
+            var book = new Book { Id = id };
+            _appDbContext.Entry(book).State = EntityState.Deleted;
+            await _appDbContext.SaveChangesAsync();
 
+            return Ok(book);
+        }
+
+        [HttpDelete("bulk")]
+        public async Task<IActionResult> DeleteBookinBulkAsync()
+        {
+            
+            //var boooks = await _appDbContext.Books.Where(x=>x.Id>5).ToListAsync();  
+            //if(boooks == null || boooks.Count == 0)
+            //{
+            //    return NotFound();
+            //}
+            //_appDbContext.Books.RemoveRange(boooks);
+            //var result = await _appDbContext.SaveChangesAsync();
+
+            //Single query to delete the book by creating a new instance of the Book class with the specified id and setting its state to Deleted
+            var result = await _appDbContext.Books.Where(x => x.Id == 5).ExecuteDeleteAsync();
+            return Ok(result);
         }
 
 
