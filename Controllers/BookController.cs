@@ -3,6 +3,7 @@ using EntityFrameworkCore.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Runtime.InteropServices;
 
 namespace EntityFrameworkCore.Controllers
 {
@@ -17,13 +18,41 @@ namespace EntityFrameworkCore.Controllers
             _appDbContext = appContext;
         }
 
-        [HttpGet]
+        [HttpGet("allasync")]
+        public async Task<IActionResult> GetBookAync()
+        {
+            //var result = await _appDbContext.Books.Select(x=> new Book
+            //{
+            //    Id = x.Id,
+            //    Title = x.Title,
+            //    Author = x.Author 
+            //}).AsNoTracking().ToListAsync();
+
+            //Eager loading: Fetching the related Author entity along with the Book entity in a single query
+            //var result = await _appDbContext.Books
+            //    .Include(x=>x.Author)
+            //    //.ThenInclude(x => x.Email) 
+            //    .ToListAsync();
+
+            //Explicit loading: Fetching the related Author entity separately after retrieving the Book entity
+            //var result = await _appDbContext.Books.FirstAsync();
+            //await _appDbContext.Entry(result).Reference(x => x.Author).LoadAsync();
+
+
+            //Lazy loading: Fetching the related Author entity automatically when accessing the navigation property
+            var result = await _appDbContext.Books.FirstAsync();
+            
+            return Ok(result);
+        }
+
+        [HttpGet("all")]
         public IActionResult GetAllBooks()
         {
             var result = (from books in _appDbContext.Books
                           select books).ToList();
             return Ok(result);
         }
+        
 
         [HttpPost("Addbook")]
         public async Task<IActionResult> AddNewBook([FromBody] Book book)

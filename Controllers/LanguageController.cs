@@ -13,6 +13,7 @@ namespace EntityFrameworkCore.Controllers
         {
             _appDbContext = appDbContext;
         }
+
         [HttpGet]
         public IActionResult GetAllLanguages()
         {

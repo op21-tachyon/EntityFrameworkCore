@@ -18,7 +18,7 @@ namespace EntityFrameworkCore.Controllers
         [HttpGet("GetAllCurrencies")]
         public IActionResult GetAllCurrencies()
         {
-            var result = _appDbContext.Currencies.ToList();
+            var result = _appDbContext.Currencies.AsNoTracking().ToList();
             //var result = (from currencies in _appDbContext.Currencies
             //             select currencies).ToList();
             return Ok(result);
@@ -27,7 +27,7 @@ namespace EntityFrameworkCore.Controllers
         [HttpGet("GetAllCurrenciesAynch")]
         public async Task<IActionResult> GetAllCurrenciesAynch()
         {
-            var result = await _appDbContext.Currencies.ToListAsync();
+            var result = await _appDbContext.Currencies.AsNoTracking().ToListAsync();
             //var result = (from currencies in _appDbContext.Currencies
             //             select currencies).ToList();
             return Ok(result);
